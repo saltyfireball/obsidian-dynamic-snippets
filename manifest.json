@@ -1,7 +1,7 @@
 {
 	"id": "dynamic-snippets",
 	"name": "Dynamic Snippets",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "1.0.0",
 	"description": "Manage custom CSS and JavaScript snippets with per-device enable/disable control. Create snippets that run only on specific devices -- perfect for mobile-specific styles, desktop-only scripts, or platform-specific customizations.",
 	"author": "saltyfireball",
