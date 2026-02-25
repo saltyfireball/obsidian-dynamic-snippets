@@ -1,0 +1,424 @@
+/* ============================================================================
+   Dynamic Snippets - Plugin Styles
+   ============================================================================ */
+
+/* Modal Actions */
+.ds-modal-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 1.5em;
+	padding-top: 1em;
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.ds-hint {
+	color: var(--text-muted);
+	font-size: 0.85em;
+	font-style: italic;
+}
+
+.ds-form-row {
+	margin-bottom: 1em;
+}
+
+.ds-form-row > label {
+	display: block;
+	font-size: 0.9em;
+	margin-bottom: 0.5em;
+	color: var(--text-normal);
+}
+
+.ds-form-row input[type="text"],
+.ds-form-row textarea {
+	width: 100%;
+	padding: 8px;
+	border-radius: 4px;
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-primary);
+	color: var(--text-normal);
+	font-family: var(--font-monospace);
+}
+
+.ds-form-row textarea {
+	min-height: 100px;
+	resize: vertical;
+}
+
+/* Current Device Section */
+.ds-current-device-section {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 12px;
+	background: var(--background-secondary);
+	border-radius: 8px;
+	margin-bottom: 1em;
+	flex-wrap: wrap;
+}
+
+.ds-device-name-input {
+	font-weight: 500;
+	border: 1px solid transparent;
+	border-radius: 4px;
+	padding: 4px 8px;
+	background: transparent;
+	color: var(--text-accent);
+	font-size: 1em;
+	min-width: 100px;
+	max-width: 200px;
+}
+
+.ds-device-name-input:hover {
+	border-color: var(--background-modifier-border);
+	background: var(--background-primary);
+}
+
+.ds-device-name-input:focus {
+	border-color: var(--interactive-accent);
+	background: var(--background-primary);
+	outline: none;
+}
+
+.ds-device-type-label {
+	color: var(--text-muted);
+	font-size: 0.85em;
+}
+
+/* Enable on this device row */
+.ds-enable-device-row {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 12px;
+	background: var(--background-secondary);
+	border-radius: 8px;
+	margin-bottom: 1em;
+}
+
+.ds-enable-device-row input[type="checkbox"] {
+	width: 18px;
+	height: 18px;
+}
+
+.ds-enable-device-row label {
+	font-weight: 500;
+	margin-bottom: 0;
+}
+
+.ds-label-muted {
+	color: var(--text-muted);
+	font-size: 0.9em;
+}
+
+.ds-add-snippet-btn {
+	margin-bottom: 1em;
+}
+
+/* Snippets List */
+.ds-snippets-list {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-top: 1em;
+}
+
+.ds-snippet-item {
+	background: var(--background-secondary);
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.ds-snippet-header {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 12px;
+	cursor: pointer;
+}
+
+.ds-snippet-header:hover {
+	background: var(--background-modifier-hover);
+}
+
+.ds-snippet-header input[type="checkbox"] {
+	width: 18px;
+	height: 18px;
+	cursor: pointer;
+}
+
+.ds-snippet-name {
+	flex: 1;
+	font-weight: 500;
+}
+
+.ds-snippet-arrow {
+	font-size: 1.2em;
+	color: var(--text-muted);
+	transition: transform 0.2s ease;
+}
+
+.ds-snippet-expanded .ds-snippet-arrow {
+	transform: rotate(90deg);
+}
+
+.ds-snippet-actions {
+	display: flex;
+	gap: 4px;
+	flex-shrink: 0;
+	margin-left: auto;
+}
+
+/* Both buttons in snippet actions should be consistent */
+.ds-snippet-actions button {
+	width: 36px;
+	height: 36px;
+	padding: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 16px;
+	color: var(--text-muted);
+	background: var(--background-primary);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 6px;
+	cursor: pointer;
+}
+
+.ds-snippet-actions button:hover {
+	color: var(--text-normal);
+	background: var(--background-modifier-hover);
+}
+
+.ds-snippet-actions .ds-remove-btn:hover {
+	color: var(--text-error);
+	border-color: var(--text-error);
+}
+
+/* Snippet Details (expandable) */
+.ds-snippet-details {
+	display: none;
+	padding: 0 12px 12px 12px;
+	border-top: 1px solid var(--background-modifier-border);
+}
+
+.ds-snippet-expanded .ds-snippet-details {
+	display: block;
+}
+
+.ds-snippet-devices {
+	margin-bottom: 12px;
+}
+
+.ds-snippet-devices > label {
+	display: block;
+	font-size: 0.85em;
+	color: var(--text-muted);
+	margin-bottom: 8px;
+	margin-top: 8px;
+}
+
+.ds-device-toggles {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.ds-device-toggle {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	padding: 4px 8px;
+	background: var(--background-primary);
+	border-radius: 4px;
+	font-size: 0.85em;
+}
+
+.ds-device-toggle.ds-current-device {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+.ds-device-toggle.ds-current-device label {
+	color: var(--text-on-accent);
+}
+
+.ds-device-toggle input[type="checkbox"] {
+	margin: 0;
+}
+
+.ds-snippet-css-preview {
+	margin-top: 8px;
+}
+
+.ds-snippet-css-preview > label {
+	display: block;
+	font-size: 0.85em;
+	color: var(--text-muted);
+	margin-bottom: 4px;
+}
+
+.ds-snippet-css-preview pre {
+	margin: 0;
+	padding: 8px;
+	background: var(--background-primary);
+	border-radius: 4px;
+	overflow-x: auto;
+	max-height: 150px;
+}
+
+.ds-snippet-css-preview code {
+	font-size: 0.8em;
+	color: var(--text-muted);
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+/* ============================================================================
+   Snippet Modal
+   ============================================================================ */
+
+.ds-snippet-modal {
+	max-width: 600px;
+}
+
+.ds-snippet-modal textarea {
+	font-family: var(--font-monospace);
+	font-size: 0.9em;
+	min-height: 200px;
+	resize: vertical;
+}
+
+.ds-snippet-textarea-wrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.ds-snippet-textarea-controls {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.ds-snippet-control-btn {
+	padding: 4px 10px;
+	min-height: 32px;
+	font-size: 0.85em;
+	background: var(--background-primary);
+	color: var(--text-muted);
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.ds-snippet-control-btn:hover {
+	background: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+
+.ds-device-grid {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-bottom: 12px;
+}
+
+.ds-device-checkbox {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 10px;
+	background: var(--background-secondary);
+	border-radius: 6px;
+	font-size: 0.9em;
+}
+
+.ds-device-checkbox.ds-current-device {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+.ds-device-checkbox.ds-current-device label {
+	color: var(--text-on-accent);
+}
+
+.ds-device-checkbox input[type="checkbox"] {
+	margin: 0;
+}
+
+/* ============================================================================
+   JS Snippets Warning
+   ============================================================================ */
+
+.ds-js-warning {
+	padding: 10px 14px;
+	margin-bottom: 1em;
+	background: rgba(255, 165, 0, 0.15);
+	border: 1px solid rgba(255, 165, 0, 0.4);
+	border-radius: 6px;
+	color: var(--text-normal);
+	font-size: 0.9em;
+}
+
+.ds-js-warning strong {
+	color: #ffa500;
+}
+
+/* ============================================================================
+   Tab Bar
+   ============================================================================ */
+
+.ds-tab-bar {
+	display: flex;
+	gap: 4px;
+	margin-bottom: 16px;
+	border-bottom: 1px solid var(--background-modifier-border);
+	padding-bottom: 8px;
+}
+
+.ds-tab-btn {
+	padding: 8px 16px;
+	border: none;
+	background: transparent;
+	color: var(--text-muted);
+	cursor: pointer;
+	border-radius: 6px 6px 0 0;
+	font-size: 0.95em;
+}
+
+.ds-tab-btn:hover {
+	background: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+
+.ds-tab-btn.ds-tab-active {
+	background: var(--background-secondary);
+	color: var(--text-normal);
+	font-weight: 500;
+}
+
+/* ============================================================================
+   Mobile Adjustments
+   ============================================================================ */
+
+.is-mobile .ds-snippet-header {
+	padding: 14px 12px;
+}
+
+.is-mobile .ds-device-toggles {
+	gap: 6px;
+}
+
+.is-mobile .ds-device-toggle {
+	padding: 6px 10px;
+	font-size: 0.9em;
+}
+
+.is-mobile .ds-device-grid {
+	gap: 6px;
+}
+
+.is-mobile .ds-device-checkbox {
+	padding: 8px 12px;
+}
