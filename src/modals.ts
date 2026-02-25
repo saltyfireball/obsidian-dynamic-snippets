@@ -10,6 +10,7 @@ export interface SnippetPluginContext extends Plugin {
 	};
 	deviceInfo: DeviceInfo;
 	getDeviceDisplayName(deviceId: string): string;
+	getSnippetStyleEl(): HTMLStyleElement | undefined;
 	saveSettings(): Promise<void>;
 }
 

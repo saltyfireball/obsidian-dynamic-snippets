@@ -20,6 +20,10 @@ function getSnippetSource(plugin: SnippetPluginContext) {
 	};
 }
 
+function applyCssSnippets(plugin: SnippetPluginContext) {
+	updateCssSnippets(getSnippetSource(plugin), plugin.getSnippetStyleEl());
+}
+
 export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 	const { app, plugin, contentEl, rerender } = context;
 
@@ -78,7 +82,7 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 			}
 			plugin.settings.cssSnippets.push(snippet);
 			await plugin.saveSettings();
-			updateCssSnippets(getSnippetSource(plugin));
+			applyCssSnippets(plugin);
 			rerender();
 		}).open();
 	});
@@ -106,7 +110,7 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 			if (!snippet.enabledDevices) snippet.enabledDevices = {};
 			snippet.enabledDevices[currentDeviceId] = currentToggle.checked;
 			await plugin.saveSettings();
-			updateCssSnippets(getSnippetSource(plugin));
+			applyCssSnippets(plugin);
 		});
 
 		const nameEl = headerRow.createEl("span", {
@@ -130,7 +134,7 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 			new CssSnippetModal(app, plugin, snippet, async (updatedSnippet) => {
 				Object.assign(snippet, updatedSnippet);
 				await plugin.saveSettings();
-				updateCssSnippets(getSnippetSource(plugin));
+				applyCssSnippets(plugin);
 				rerender();
 			}).open();
 		});
@@ -147,7 +151,7 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 					(s) => s.id !== snippet.id,
 				);
 				await plugin.saveSettings();
-				updateCssSnippets(getSnippetSource(plugin));
+				applyCssSnippets(plugin);
 				rerender();
 			}
 		});
@@ -186,7 +190,7 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 				if (!snippet.enabledDevices) snippet.enabledDevices = {};
 				snippet.enabledDevices[deviceId] = checkbox.checked;
 				await plugin.saveSettings();
-				updateCssSnippets(getSnippetSource(plugin));
+				applyCssSnippets(plugin);
 				if (isCurrentDevice) {
 					currentToggle.checked = checkbox.checked;
 				}
