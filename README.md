@@ -21,7 +21,7 @@ An Obsidian plugin for managing custom CSS and JavaScript snippets with per-devi
 
 ### From Obsidian Community Plugins
 
-**Might not be submitted yet**
+**Might not be approved yet**
 
 1. Open **Settings** > **Community Plugins**
 2. Search for **Dynamic Snippets**
