@@ -29,7 +29,7 @@ An Obsidian plugin for managing custom CSS and JavaScript snippets with per-devi
 
 ### Manual Installation
 
-1. Download `main.js`, `manifest.json`, and `styles.css` from the latest release
+1. Download `main.js`, `manifest.json`, and `styles.css` from the [latest release](../../releases/latest)
 2. Create a folder called `dynamic-snippets` in your vault's `.obsidian/plugins/` directory
 3. Copy the downloaded files into that folder
 4. Restart Obsidian and enable the plugin in **Settings** > **Community Plugins**
