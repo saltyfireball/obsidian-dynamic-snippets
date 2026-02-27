@@ -42,7 +42,7 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 			name: currentDeviceName,
 		};
 	}
-	const currentDeviceEntry = knownDevices[currentDeviceId]!;
+	const currentDeviceEntry = knownDevices[currentDeviceId];
 
 	new Setting(contentEl).setName("Custom CSS snippets").setHeading();
 
@@ -54,11 +54,12 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 		value: currentDeviceName,
 		cls: "ds-device-name-input",
 	});
-	deviceNameInput.addEventListener("change", async () => {
+	deviceNameInput.addEventListener("change", () => {
 		const newName = deviceNameInput.value.trim() || currentDeviceType;
 		currentDeviceEntry.name = newName;
-		await plugin.saveSettings();
-		new Notice(`Device renamed to "${newName}"`);
+		void plugin.saveSettings().then(() => {
+			new Notice(`Device renamed to "${newName}"`);
+		});
 	});
 
 	deviceSection.createEl("span", {
@@ -72,18 +73,19 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 	});
 
 	const addBtn = contentEl.createEl("button", {
-		text: "+ Add Snippet",
+		text: "Add snippet",
 		cls: "ds-add-snippet-btn",
 	});
 	addBtn.addEventListener("click", () => {
-		new CssSnippetModal(app, plugin, null, async (snippet) => {
+		new CssSnippetModal(app, plugin, null, (snippet) => {
 			if (!plugin.settings.cssSnippets) {
 				plugin.settings.cssSnippets = [] as CssSnippet[];
 			}
 			plugin.settings.cssSnippets.push(snippet);
-			await plugin.saveSettings();
-			applyCssSnippets(plugin);
-			rerender();
+			void plugin.saveSettings().then(() => {
+				applyCssSnippets(plugin);
+				rerender();
+			});
 		}).open();
 	});
 
@@ -106,11 +108,12 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 		currentToggle.checked = !!(
 			snippet.enabledDevices && snippet.enabledDevices[currentDeviceId]
 		);
-		currentToggle.addEventListener("change", async () => {
+		currentToggle.addEventListener("change", () => {
 			if (!snippet.enabledDevices) snippet.enabledDevices = {};
 			snippet.enabledDevices[currentDeviceId] = currentToggle.checked;
-			await plugin.saveSettings();
-			applyCssSnippets(plugin);
+			void plugin.saveSettings().then(() => {
+				applyCssSnippets(plugin);
+			});
 		});
 
 		const nameEl = headerRow.createEl("span", {
@@ -131,11 +134,12 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 		});
 		editBtn.addEventListener("click", (e) => {
 			e.stopPropagation();
-			new CssSnippetModal(app, plugin, snippet, async (updatedSnippet) => {
+			new CssSnippetModal(app, plugin, snippet, (updatedSnippet) => {
 				Object.assign(snippet, updatedSnippet);
-				await plugin.saveSettings();
-				applyCssSnippets(plugin);
-				rerender();
+				void plugin.saveSettings().then(() => {
+					applyCssSnippets(plugin);
+					rerender();
+				});
 			}).open();
 		});
 
@@ -144,15 +148,17 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 			cls: "ds-remove-btn",
 			attr: { title: "Delete" },
 		});
-		deleteBtn.addEventListener("click", async (e) => {
+		deleteBtn.addEventListener("click", (e) => {
 			e.stopPropagation();
+			// eslint-disable-next-line no-alert -- simple confirmation before destructive action
 			if (confirm(`Delete snippet "${snippet.name}"?`)) {
 				plugin.settings.cssSnippets = plugin.settings.cssSnippets.filter(
 					(s) => s.id !== snippet.id,
 				);
-				await plugin.saveSettings();
-				applyCssSnippets(plugin);
-				rerender();
+				void plugin.saveSettings().then(() => {
+					applyCssSnippets(plugin);
+					rerender();
+				});
 			}
 		});
 
@@ -186,14 +192,15 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 			checkbox.checked = !!(
 				snippet.enabledDevices && snippet.enabledDevices[deviceId]
 			);
-			checkbox.addEventListener("change", async () => {
+			checkbox.addEventListener("change", () => {
 				if (!snippet.enabledDevices) snippet.enabledDevices = {};
 				snippet.enabledDevices[deviceId] = checkbox.checked;
-				await plugin.saveSettings();
-				applyCssSnippets(plugin);
-				if (isCurrentDevice) {
-					currentToggle.checked = checkbox.checked;
-				}
+				void plugin.saveSettings().then(() => {
+					applyCssSnippets(plugin);
+					if (isCurrentDevice) {
+						currentToggle.checked = checkbox.checked;
+					}
+				});
 			});
 
 			const labelText = isCurrentDevice
@@ -236,7 +243,7 @@ export function renderJsSnippetsSection(context: SnippetSettingsContext) {
 			name: currentDeviceName,
 		};
 	}
-	const currentJsDeviceEntry = knownDevices[currentDeviceId]!;
+	const currentJsDeviceEntry = knownDevices[currentDeviceId];
 
 	new Setting(contentEl).setName("Custom JavaScript snippets").setHeading();
 	contentEl.createEl("p", {
@@ -257,9 +264,9 @@ export function renderJsSnippetsSection(context: SnippetSettingsContext) {
 		value: currentDeviceName,
 		cls: "ds-device-name-input",
 	});
-	deviceNameInput.addEventListener("change", async () => {
+	deviceNameInput.addEventListener("change", () => {
 		currentJsDeviceEntry.name = deviceNameInput.value;
-		await plugin.saveSettings();
+		void plugin.saveSettings();
 	});
 	deviceInfo.createEl("span", {
 		text: ` (${plugin.deviceInfo.type})`,
@@ -267,25 +274,26 @@ export function renderJsSnippetsSection(context: SnippetSettingsContext) {
 	});
 
 	const addBtn = contentEl.createEl("button", {
-		text: "+ Add JS Snippet",
+		text: "Add JavaScript snippet",
 		cls: "ds-add-snippet-btn",
 	});
 	addBtn.addEventListener("click", () => {
-		new JsSnippetModal(app, plugin, null, async (snippet) => {
+		new JsSnippetModal(app, plugin, null, (snippet) => {
 			if (!plugin.settings.jsSnippets) {
 				plugin.settings.jsSnippets = [] as JsSnippet[];
 			}
 			plugin.settings.jsSnippets.push(snippet);
-			await plugin.saveSettings();
-			updateJsSnippets(getSnippetSource(plugin));
-			rerender();
+			void plugin.saveSettings().then(() => {
+				updateJsSnippets(getSnippetSource(plugin));
+				rerender();
+			});
 		}).open();
 	});
 
 	const snippets = plugin.settings.jsSnippets || [];
 	if (snippets.length === 0) {
 		contentEl.createEl("p", {
-			text: "No JS snippets yet. Add one to get started.",
+			text: "No JavaScript snippets yet. Add one to get started.",
 			cls: "ds-hint",
 		});
 		return;
@@ -301,11 +309,12 @@ export function renderJsSnippetsSection(context: SnippetSettingsContext) {
 		currentToggle.checked = !!(
 			snippet.enabledDevices && snippet.enabledDevices[currentDeviceId]
 		);
-		currentToggle.addEventListener("change", async () => {
+		currentToggle.addEventListener("change", () => {
 			if (!snippet.enabledDevices) snippet.enabledDevices = {};
 			snippet.enabledDevices[currentDeviceId] = currentToggle.checked;
-			await plugin.saveSettings();
-			updateJsSnippets(getSnippetSource(plugin));
+			void plugin.saveSettings().then(() => {
+				updateJsSnippets(getSnippetSource(plugin));
+			});
 		});
 
 		const nameEl = headerRow.createEl("span", {
@@ -326,11 +335,12 @@ export function renderJsSnippetsSection(context: SnippetSettingsContext) {
 		});
 		editBtn.addEventListener("click", (e) => {
 			e.stopPropagation();
-			new JsSnippetModal(app, plugin, snippet, async (updatedSnippet) => {
+			new JsSnippetModal(app, plugin, snippet, (updatedSnippet) => {
 				Object.assign(snippet, updatedSnippet);
-				await plugin.saveSettings();
-				updateJsSnippets(getSnippetSource(plugin));
-				rerender();
+				void plugin.saveSettings().then(() => {
+					updateJsSnippets(getSnippetSource(plugin));
+					rerender();
+				});
 			}).open();
 		});
 
@@ -339,15 +349,17 @@ export function renderJsSnippetsSection(context: SnippetSettingsContext) {
 			cls: "ds-remove-btn",
 			attr: { title: "Delete" },
 		});
-		deleteBtn.addEventListener("click", async (e) => {
+		deleteBtn.addEventListener("click", (e) => {
 			e.stopPropagation();
+			// eslint-disable-next-line no-alert -- simple confirmation before destructive action
 			if (confirm(`Delete snippet "${snippet.name}"?`)) {
 				plugin.settings.jsSnippets = plugin.settings.jsSnippets.filter(
 					(s) => s.id !== snippet.id,
 				);
-				await plugin.saveSettings();
-				updateJsSnippets(getSnippetSource(plugin));
-				rerender();
+				void plugin.saveSettings().then(() => {
+					updateJsSnippets(getSnippetSource(plugin));
+					rerender();
+				});
 			}
 		});
 
@@ -381,14 +393,15 @@ export function renderJsSnippetsSection(context: SnippetSettingsContext) {
 			checkbox.checked = !!(
 				snippet.enabledDevices && snippet.enabledDevices[deviceId]
 			);
-			checkbox.addEventListener("change", async () => {
+			checkbox.addEventListener("change", () => {
 				if (!snippet.enabledDevices) snippet.enabledDevices = {};
 				snippet.enabledDevices[deviceId] = checkbox.checked;
-				await plugin.saveSettings();
-				updateJsSnippets(getSnippetSource(plugin));
-				if (isCurrentDevice) {
-					currentToggle.checked = checkbox.checked;
-				}
+				void plugin.saveSettings().then(() => {
+					updateJsSnippets(getSnippetSource(plugin));
+					if (isCurrentDevice) {
+						currentToggle.checked = checkbox.checked;
+					}
+				});
 			});
 
 			const labelText = isCurrentDevice

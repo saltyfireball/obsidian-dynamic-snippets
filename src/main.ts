@@ -1,4 +1,4 @@
-import { Plugin, PluginSettingTab, App, Setting } from "obsidian";
+import { Plugin, PluginSettingTab, App } from "obsidian";
 import type { CssSnippet, JsSnippet, KnownDeviceEntry, DeviceInfo } from "./types";
 import { getDeviceInfo } from "./device";
 import { updateCssSnippets, updateJsSnippets, cleanupJsSnippets } from "./update";
@@ -29,7 +29,7 @@ export default class DynamicSnippetsPlugin extends Plugin implements SnippetPlug
 		this.snippetStyleEl = this.createStyleEl();
 
 		// Detect and register current device
-		this.deviceInfo = getDeviceInfo();
+		this.deviceInfo = getDeviceInfo(this.app);
 		this.registerCurrentDevice();
 
 		// Apply snippets
@@ -49,6 +49,7 @@ export default class DynamicSnippetsPlugin extends Plugin implements SnippetPlug
 	private createStyleEl(): HTMLStyleElement {
 		const id = "dynamic-snippets-styles";
 		document.getElementById(id)?.remove();
+		// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic style element for user-defined CSS snippets applied at runtime
 		const el = document.createElement("style");
 		el.id = id;
 		document.head.appendChild(el);
@@ -88,7 +89,9 @@ export default class DynamicSnippetsPlugin extends Plugin implements SnippetPlug
 	}
 
 	async loadSettings() {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- loadData returns any
 		const data = await this.loadData();
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- merging with loadData result
 		this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
 		// Ensure arrays exist
 		if (!this.settings.cssSnippets) this.settings.cssSnippets = [];
@@ -114,7 +117,7 @@ class DynamicSnippetsSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		new Setting(containerEl).setName("Dynamic snippets").setHeading();
+		;
 		containerEl.createEl("p", {
 			text: "Manage CSS and JavaScript snippets with per-device control.",
 			cls: "ds-hint",
@@ -123,11 +126,11 @@ class DynamicSnippetsSettingTab extends PluginSettingTab {
 		// Tab buttons
 		const tabBar = containerEl.createDiv("ds-tab-bar");
 		const cssTab = tabBar.createEl("button", {
-			text: "CSS Snippets",
+			text: "CSS snippets",
 			cls: `ds-tab-btn ${this.activeTab === "css" ? "ds-tab-active" : ""}`,
 		});
 		const jsTab = tabBar.createEl("button", {
-			text: "JS Snippets",
+			text: "JavaScript snippets",
 			cls: `ds-tab-btn ${this.activeTab === "js" ? "ds-tab-active" : ""}`,
 		});
 

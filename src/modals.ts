@@ -110,12 +110,14 @@ async function copyTextareaValue(
 
 	if (
 		typeof document !== "undefined" &&
+		// eslint-disable-next-line @typescript-eslint/no-deprecated -- fallback for environments without clipboard API
 		typeof document.execCommand === "function"
 	) {
 		const prevStart = textarea.selectionStart ?? 0;
 		const prevEnd = textarea.selectionEnd ?? 0;
 		textarea.select();
 		try {
+			// eslint-disable-next-line @typescript-eslint/no-deprecated -- fallback for environments without clipboard API
 			return document.execCommand("copy");
 		} finally {
 			textarea.setSelectionRange(prevStart, prevEnd);
@@ -256,18 +258,18 @@ export class CssSnippetModal extends Modal {
 		});
 
 		const nameRow = contentEl.createDiv("ds-form-row");
-		nameRow.createEl("label", { text: "Snippet Name" });
+		nameRow.createEl("label", { text: "Snippet name" });
 		const nameInput = nameRow.createEl("input", {
 			type: "text",
 			value: this.snippetData.name,
-			placeholder: "e.g., Mobile Font Size, Dark Mode Tweaks",
+			placeholder: "e.g., Mobile font size, Dark mode tweaks",
 		});
 		nameInput.addEventListener("input", () => {
 			this.snippetData.name = nameInput.value;
 		});
 
 		const cssRow = contentEl.createDiv("ds-form-row");
-		cssRow.createEl("label", { text: "CSS Code" });
+		cssRow.createEl("label", { text: "CSS code" });
 		const cssTextareaWrapper = cssRow.createDiv(
 			"ds-snippet-textarea-wrapper",
 		);
@@ -276,7 +278,7 @@ export class CssSnippetModal extends Modal {
 		);
 		const cssTextarea = cssTextareaWrapper.createEl("textarea", {
 			placeholder: "/* Your CSS here */\n.some-class {\n  color: red;\n}",
-		}) as HTMLTextAreaElement;
+		});
 		attachSnippetTextareaControls(cssControlRow, cssTextarea, this.plugin);
 		cssTextarea.value = this.snippetData.css;
 		cssTextarea.rows = 12;
@@ -395,18 +397,18 @@ export class JsSnippetModal extends Modal {
 		});
 
 		const nameRow = contentEl.createDiv("ds-form-row");
-		nameRow.createEl("label", { text: "Snippet Name" });
+		nameRow.createEl("label", { text: "Snippet name" });
 		const nameInput = nameRow.createEl("input", {
 			type: "text",
 			value: this.snippetData.name,
-			placeholder: "e.g., Auto-link Tasks, Custom Hotkeys",
+			placeholder: "e.g., Auto-link tasks, Custom hotkeys",
 		});
 		nameInput.addEventListener("input", () => {
 			this.snippetData.name = nameInput.value;
 		});
 
 		const jsRow = contentEl.createDiv("ds-form-row");
-		jsRow.createEl("label", { text: "JavaScript Code" });
+		jsRow.createEl("label", { text: "JavaScript code" });
 		const jsTextareaWrapper = jsRow.createDiv(
 			"ds-snippet-textarea-wrapper",
 		);
@@ -416,7 +418,7 @@ export class JsSnippetModal extends Modal {
 		const jsTextarea = jsTextareaWrapper.createEl("textarea", {
 			placeholder:
 				'// Your JavaScript here\nconsole.log("Hello from Dynamic Snippets!");',
-		}) as HTMLTextAreaElement;
+		});
 		attachSnippetTextareaControls(jsControlRow, jsTextarea, this.plugin);
 		jsTextarea.value = this.snippetData.js;
 		jsTextarea.rows = 12;
