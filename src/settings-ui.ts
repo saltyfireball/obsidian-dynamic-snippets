@@ -1,4 +1,4 @@
-import { Notice } from "obsidian";
+import { Notice, Setting } from "obsidian";
 import type { App } from "obsidian";
 import { CssSnippetModal, JsSnippetModal } from "./modals";
 import { updateCssSnippets, updateJsSnippets } from "./update";
@@ -44,7 +44,7 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 	}
 	const currentDeviceEntry = knownDevices[currentDeviceId]!;
 
-	contentEl.createEl("h2", { text: "Custom CSS Snippets" });
+	new Setting(contentEl).setName("Custom CSS snippets").setHeading();
 
 	const deviceSection = contentEl.createDiv("ds-current-device-section");
 	deviceSection.createEl("span", { text: "This device: " });
@@ -238,7 +238,7 @@ export function renderJsSnippetsSection(context: SnippetSettingsContext) {
 	}
 	const currentJsDeviceEntry = knownDevices[currentDeviceId]!;
 
-	contentEl.createEl("h2", { text: "Custom JavaScript Snippets" });
+	new Setting(contentEl).setName("Custom JavaScript snippets").setHeading();
 	contentEl.createEl("p", {
 		text: "Add custom JavaScript that runs when Obsidian loads. Use with caution!",
 		cls: "ds-hint",

@@ -1,4 +1,4 @@
-import { Plugin, PluginSettingTab, App } from "obsidian";
+import { Plugin, PluginSettingTab, App, Setting } from "obsidian";
 import type { CssSnippet, JsSnippet, KnownDeviceEntry, DeviceInfo } from "./types";
 import { getDeviceInfo } from "./device";
 import { updateCssSnippets, updateJsSnippets, cleanupJsSnippets } from "./update";
@@ -114,7 +114,7 @@ class DynamicSnippetsSettingTab extends PluginSettingTab {
 		const { containerEl } = this;
 		containerEl.empty();
 
-		containerEl.createEl("h1", { text: "Dynamic Snippets" });
+		new Setting(containerEl).setName("Dynamic snippets").setHeading();
 		containerEl.createEl("p", {
 			text: "Manage CSS and JavaScript snippets with per-device control.",
 			cls: "ds-hint",
