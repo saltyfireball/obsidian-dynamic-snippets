@@ -10,7 +10,7 @@ export interface SnippetPluginContext extends Plugin {
 	};
 	deviceInfo: DeviceInfo;
 	getDeviceDisplayName(deviceId: string): string;
-	getSnippetStyleEl(): HTMLStyleElement | undefined;
+	getSnippetStyleSheet(): CSSStyleSheet | undefined;
 	saveSettings(): Promise<void>;
 }
 
@@ -105,22 +105,6 @@ async function copyTextareaValue(
 			return true;
 		} catch (error) {
 			console.error("Failed to copy snippet text", error);
-		}
-	}
-
-	if (
-		typeof document !== "undefined" &&
-		// eslint-disable-next-line @typescript-eslint/no-deprecated -- fallback for environments without clipboard API
-		typeof document.execCommand === "function"
-	) {
-		const prevStart = textarea.selectionStart ?? 0;
-		const prevEnd = textarea.selectionEnd ?? 0;
-		textarea.select();
-		try {
-			// eslint-disable-next-line @typescript-eslint/no-deprecated -- fallback for environments without clipboard API
-			return document.execCommand("copy");
-		} finally {
-			textarea.setSelectionRange(prevStart, prevEnd);
 		}
 	}
 

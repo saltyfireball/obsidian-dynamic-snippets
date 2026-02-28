@@ -1,4 +1,4 @@
-import { Notice, Setting } from "obsidian";
+import { Modal, Notice, Setting } from "obsidian";
 import type { App } from "obsidian";
 import { CssSnippetModal, JsSnippetModal } from "./modals";
 import { updateCssSnippets, updateJsSnippets } from "./update";
@@ -21,7 +21,7 @@ function getSnippetSource(plugin: SnippetPluginContext) {
 }
 
 function applyCssSnippets(plugin: SnippetPluginContext) {
-	updateCssSnippets(getSnippetSource(plugin), plugin.getSnippetStyleEl());
+	updateCssSnippets(getSnippetSource(plugin), plugin.getSnippetStyleSheet());
 }
 
 export function renderCssSnippetsSection(context: SnippetSettingsContext) {
@@ -150,16 +150,19 @@ export function renderCssSnippetsSection(context: SnippetSettingsContext) {
 		});
 		deleteBtn.addEventListener("click", (e) => {
 			e.stopPropagation();
-			// eslint-disable-next-line no-alert -- simple confirmation before destructive action
-			if (confirm(`Delete snippet "${snippet.name}"?`)) {
-				plugin.settings.cssSnippets = plugin.settings.cssSnippets.filter(
-					(s) => s.id !== snippet.id,
-				);
-				void plugin.saveSettings().then(() => {
-					applyCssSnippets(plugin);
-					rerender();
-				});
-			}
+			new ConfirmModal(
+				app,
+				`Delete snippet "${snippet.name}"?`,
+				() => {
+					plugin.settings.cssSnippets = plugin.settings.cssSnippets.filter(
+						(s) => s.id !== snippet.id,
+					);
+					void plugin.saveSettings().then(() => {
+						applyCssSnippets(plugin);
+						rerender();
+					});
+				},
+			).open();
 		});
 
 		const details = item.createDiv("ds-snippet-details");
@@ -351,16 +354,19 @@ export function renderJsSnippetsSection(context: SnippetSettingsContext) {
 		});
 		deleteBtn.addEventListener("click", (e) => {
 			e.stopPropagation();
-			// eslint-disable-next-line no-alert -- simple confirmation before destructive action
-			if (confirm(`Delete snippet "${snippet.name}"?`)) {
-				plugin.settings.jsSnippets = plugin.settings.jsSnippets.filter(
-					(s) => s.id !== snippet.id,
-				);
-				void plugin.saveSettings().then(() => {
-					updateJsSnippets(getSnippetSource(plugin));
-					rerender();
-				});
-			}
+			new ConfirmModal(
+				app,
+				`Delete snippet "${snippet.name}"?`,
+				() => {
+					plugin.settings.jsSnippets = plugin.settings.jsSnippets.filter(
+						(s) => s.id !== snippet.id,
+					);
+					void plugin.saveSettings().then(() => {
+						updateJsSnippets(getSnippetSource(plugin));
+						rerender();
+					});
+				},
+			).open();
 		});
 
 		const details = item.createDiv("ds-snippet-details");
@@ -424,4 +430,18 @@ export function renderJsSnippetsSection(context: SnippetSettingsContext) {
 				snippet.js.substring(0, 500) + (snippet.js.length > 500 ? "..." : ""),
 		});
 	}
+}
+
+class ConfirmModal extends Modal {
+	private resolved = false;
+	constructor(app: App, private message: string, private onConfirm: () => void) {
+		super(app);
+	}
+	onOpen() {
+		this.contentEl.createEl("p", { text: this.message });
+		new Setting(this.contentEl)
+			.addButton(b => b.setButtonText("Confirm").setCta().onClick(() => { this.resolved = true; this.close(); this.onConfirm(); }))
+			.addButton(b => b.setButtonText("Cancel").onClick(() => this.close()));
+	}
+	onClose() { this.contentEl.empty(); }
 }

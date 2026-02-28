@@ -14,9 +14,9 @@ let jsScriptEl: HTMLScriptElement | null = null;
 
 export function updateCssSnippets(
 	source: SnippetSource,
-	styleEl?: HTMLStyleElement,
+	styleSheet?: CSSStyleSheet,
 ): void {
-	if (!styleEl) return;
+	if (!styleSheet) return;
 
 	const snippets = source.cssSnippets || [];
 	const deviceId = source.deviceId;
@@ -29,7 +29,7 @@ export function updateCssSnippets(
 		.map((snippet) => `/* Snippet: ${snippet.name} */\n${snippet.css}`)
 		.join("\n\n");
 
-	styleEl.textContent = css;
+	styleSheet.replaceSync(css);
 }
 
 export function cleanupJsSnippets(): void {

@@ -20,13 +20,13 @@ const DEFAULT_SETTINGS: DynamicSnippetsSettings = {
 export default class DynamicSnippetsPlugin extends Plugin implements SnippetPluginContext {
 	settings!: DynamicSnippetsSettings;
 	deviceInfo!: DeviceInfo;
-	private snippetStyleEl?: HTMLStyleElement;
+	private snippetStyleSheet?: CSSStyleSheet;
 
 	async onload() {
 		await this.loadSettings();
 
-		// Create managed style element for CSS snippets
-		this.snippetStyleEl = this.createStyleEl();
+		// Create managed stylesheet for CSS snippets
+		this.snippetStyleSheet = this.createStyleSheet();
 
 		// Detect and register current device
 		this.deviceInfo = getDeviceInfo(this.app);
@@ -40,20 +40,16 @@ export default class DynamicSnippetsPlugin extends Plugin implements SnippetPlug
 	}
 
 	onunload() {
-		if (this.snippetStyleEl) {
-			this.snippetStyleEl.remove();
+		if (this.snippetStyleSheet) {
+			document.adoptedStyleSheets = document.adoptedStyleSheets.filter(s => s !== this.snippetStyleSheet);
 		}
 		cleanupJsSnippets();
 	}
 
-	private createStyleEl(): HTMLStyleElement {
-		const id = "dynamic-snippets-styles";
-		document.getElementById(id)?.remove();
-		// eslint-disable-next-line obsidianmd/no-forbidden-elements -- dynamic style element for user-defined CSS snippets applied at runtime
-		const el = document.createElement("style");
-		el.id = id;
-		document.head.appendChild(el);
-		return el;
+	private createStyleSheet(): CSSStyleSheet {
+		const sheet = new CSSStyleSheet();
+		document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];
+		return sheet;
 	}
 
 	private registerCurrentDevice(): void {
@@ -74,7 +70,7 @@ export default class DynamicSnippetsPlugin extends Plugin implements SnippetPlug
 			jsSnippets: this.settings.jsSnippets,
 			deviceId: this.deviceInfo.id,
 		};
-		updateCssSnippets(source, this.snippetStyleEl);
+		updateCssSnippets(source, this.snippetStyleSheet);
 		updateJsSnippets(source);
 	}
 
@@ -84,8 +80,8 @@ export default class DynamicSnippetsPlugin extends Plugin implements SnippetPlug
 		return deviceId.substring(0, 8) + "...";
 	}
 
-	getSnippetStyleEl(): HTMLStyleElement | undefined {
-		return this.snippetStyleEl;
+	getSnippetStyleSheet(): CSSStyleSheet | undefined {
+		return this.snippetStyleSheet;
 	}
 
 	async loadSettings() {
