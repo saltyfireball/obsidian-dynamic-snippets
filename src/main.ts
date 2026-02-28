@@ -89,10 +89,8 @@ export default class DynamicSnippetsPlugin extends Plugin implements SnippetPlug
 	}
 
 	async loadSettings() {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- loadData returns any
-		const data = await this.loadData();
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment -- merging with loadData result
-		this.settings = Object.assign({}, DEFAULT_SETTINGS, data);
+		const data = (await this.loadData()) as Partial<DynamicSnippetsSettings> | null;
+		this.settings = Object.assign({}, DEFAULT_SETTINGS, data ?? {});
 		// Ensure arrays exist
 		if (!this.settings.cssSnippets) this.settings.cssSnippets = [];
 		if (!this.settings.jsSnippets) this.settings.jsSnippets = [];
